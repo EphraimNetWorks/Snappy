@@ -12,6 +12,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:src="@drawable/christmas_hat"
+        android:scaleType="fitCenter"
         android:textSize="14sp"
         android:textColor="#000000"/>
 

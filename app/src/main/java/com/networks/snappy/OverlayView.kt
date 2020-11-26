@@ -32,7 +32,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
 
     private var cameraPropsBitmapList = listOf<Bitmap>()
 
-    var faceProps: FaceProps = FaceProps.CHRISTMAS
+    var faceProps: FaceProps = FaceProps.PIRATE
         set(value) {
             cameraPropsBitmapList  = value.props.map {
                 BitmapFactory.decodeResource(resources, it.propId)
@@ -79,11 +79,11 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     private fun drawChristmasProp(canvas: Canvas, face: Face) {
         face.getContour(FaceContour.FACE)?.let {
 
-            val hatBottom = it.points[0].y
+            val hatBottom = it.points[4].y
             val hatStart = face.boundingBox.left
             val hatEnd = face.boundingBox.right
 
-            val rectHeight = (cameraPropsBitmapList[0].height/cameraPropsBitmapList[0].width)*(hatEnd-hatStart)
+            val rectHeight = (cameraPropsBitmapList[0].height/cameraPropsBitmapList[0].width.toFloat())*(hatEnd-hatStart)
             val hatTop = hatBottom - rectHeight
 
             val hatRect = Rect(
@@ -92,11 +92,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                 translateX(hatEnd.toFloat()).toInt(),
                 translateY(hatBottom).toInt()
             )
-            canvas.save()
-            canvas.rotate(face.headEulerAngleY)
+            drawBitmapOnCanvas(canvas, cameraPropsBitmapList[0],hatRect, face.headEulerAngleY)
 
-            canvas.drawBitmap(cameraPropsBitmapList[0], null, hatRect, null)
-            canvas.restore()
         }
 
     }
@@ -112,45 +109,39 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                 CameraProp.Type.LEFT_HEAD->{
                     face.getContour(FaceContour.FACE)?.let {
                         val puppyLeftEarBottom = it.points[32].y
-                        val puppyLeftEarStart = face.boundingBox.left
-                        val puppyLeftEarEnd = it.points[32].x
+                        val puppyLeftEarEnd = face.boundingBox.left+60
+                        val puppyLeftEarStart = puppyLeftEarEnd-200
 
-                        val rectHeight = (cameraPropsBitmapList[index].height/cameraPropsBitmapList[index].width)*(puppyLeftEarEnd-puppyLeftEarStart)
+                        val rectHeight = (cameraPropsBitmapList[index].height/cameraPropsBitmapList[index].width.toFloat())*(puppyLeftEarEnd-puppyLeftEarStart)
                         val puppyLeftEarTop = puppyLeftEarBottom - rectHeight
 
                         val puppyLeftEarRect = Rect(
                             translateX(puppyLeftEarStart.toFloat()).toInt(),
                             translateY(puppyLeftEarTop).toInt(),
-                            translateX(puppyLeftEarEnd).toInt(),
+                            translateX(puppyLeftEarEnd.toFloat()).toInt(),
                             translateY(puppyLeftEarBottom).toInt()
                         )
-                        canvas.save()
-                        canvas.rotate(face.headEulerAngleY)
 
-                        canvas.drawBitmap(cameraPropsBitmapList[0], null, puppyLeftEarRect, null)
-                        canvas.restore()
+                        drawBitmapOnCanvas(canvas, cameraPropsBitmapList[index],puppyLeftEarRect, face.headEulerAngleY)
                     }
                 }
                 CameraProp.Type.RIGHT_HEAD->{
                     face.getContour(FaceContour.FACE)?.let {
-                        val puppyRightEarBottom = it.points[3].y
-                        val puppyRightEarStart = it.points[3].x
-                        val puppyRightEarEnd = face.boundingBox.right
+                        val puppyRightEarBottom = it.points[32].y
+                        val puppyRightEarEnd = face.boundingBox.right-60
+                        val puppyRightEarStart = puppyRightEarEnd - 200
 
-                        val rectHeight = (cameraPropsBitmapList[index].height/cameraPropsBitmapList[index].width)*(puppyRightEarEnd-puppyRightEarStart)
+                        val rectHeight = (cameraPropsBitmapList[index].height/cameraPropsBitmapList[index].width.toFloat())*(puppyRightEarEnd-puppyRightEarStart)
                         val puppyRightEarTop = puppyRightEarBottom - rectHeight
 
                         val puppyRightEarRect = Rect(
-                            translateX(puppyRightEarStart).toInt(),
+                            translateX(puppyRightEarStart.toFloat()).toInt(),
                             translateY(puppyRightEarTop).toInt(),
                             translateX(puppyRightEarEnd.toFloat()).toInt(),
                             translateY(puppyRightEarBottom).toInt()
                         )
-                        canvas.save()
-                        canvas.rotate(face.headEulerAngleY)
+                        drawBitmapOnCanvas(canvas, cameraPropsBitmapList[index],puppyRightEarRect, face.headEulerAngleY)
 
-                        canvas.drawBitmap(cameraPropsBitmapList[0], null, puppyRightEarRect, null)
-                        canvas.restore()
                     }
                 }
                 CameraProp.Type.NOSE->{
@@ -159,7 +150,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                         val puppyNoseStart = it.points[0].x
                         val puppyNoseEnd = it.points[2].x
 
-                        val rectHeight = (cameraPropsBitmapList[index].height/cameraPropsBitmapList[index].width)*(puppyNoseEnd-puppyNoseStart)
+                        val rectHeight = (cameraPropsBitmapList[index].height/cameraPropsBitmapList[index].width.toFloat())*(puppyNoseEnd-puppyNoseStart)
                         val puppyNoseTop = puppyNoseBottom - rectHeight
 
                         val puppyNoseRect = Rect(
@@ -186,14 +177,14 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
     private fun drawNerdProp(canvas: Canvas, face: Face) {
 
         val leftEyebrow = face.getContour(FaceContour.LEFT_EYEBROW_TOP)
-        val rightEyebrow = face.getContour(FaceContour.RIGHT_EYEBROW_BOTTOM)
+        val rightEyebrow = face.getContour(FaceContour.RIGHT_EYEBROW_TOP)
 
         if(leftEyebrow!= null && rightEyebrow !=null){
 
             val glassesTop = leftEyebrow.points[0].y
             val glassesStart = face.boundingBox.left
             val glassesEnd = face.boundingBox.right
-            val rectHeight = (cameraPropsBitmapList[0].height/cameraPropsBitmapList[0].width)*(glassesEnd-glassesStart)
+            val rectHeight = (cameraPropsBitmapList[0].height/cameraPropsBitmapList[0].width.toFloat())*(glassesEnd-glassesStart)
 
             val glassesBottom = glassesTop + rectHeight
 
@@ -203,7 +194,6 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                 translateX(glassesEnd.toFloat()).toInt(),
                 translateY(glassesBottom).toInt()
             )
-
 
             drawBitmapOnCanvas(canvas, cameraPropsBitmapList[0],glassesRect, face.headEulerAngleY)
         }
@@ -222,7 +212,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                         val pirateHatStart = face.boundingBox.left
                         val pirateHatEnd = face.boundingBox.right
 
-                        val rectHeight = (cameraPropsBitmapList[index].height/cameraPropsBitmapList[index].width)*(pirateHatEnd-pirateHatStart)
+                        val rectHeight = (cameraPropsBitmapList[index].height/cameraPropsBitmapList[index].width.toFloat())*(pirateHatEnd-pirateHatStart)
                         val pirateHatTop = pirateHatBottom - rectHeight
 
                         val pirateHatRect = Rect(
@@ -236,12 +226,12 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                     }
                 }
                 CameraProp.Type.LEFT_EYEBROW->{
-                    face.getContour(FaceContour.LEFT_EYEBROW_BOTTOM)?.let {
+                    face.getContour(FaceContour.RIGHT_EYEBROW_TOP)?.let {
                         val pirateEyePatchTop = it.points[0].y
-                        val pirateEyePatchStart = it.points[0].x
-                        val pirateEyePatchEnd = it.points[4].x
+                        val pirateEyePatchStart = it.points[4].x
+                        val pirateEyePatchEnd = it.points[0].x
 
-                        val rectHeight = (cameraPropsBitmapList[index].height/cameraPropsBitmapList[index].width)*(pirateEyePatchEnd-pirateEyePatchStart)
+                        val rectHeight = (cameraPropsBitmapList[index].height/cameraPropsBitmapList[index].width.toFloat())*(pirateEyePatchEnd-pirateEyePatchStart)
                         val pirateEyePatchBottom = pirateEyePatchTop + rectHeight
 
                         val pirateEyePatchRect = Rect(
@@ -254,25 +244,27 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
                         drawBitmapOnCanvas(canvas, cameraPropsBitmapList[index],pirateEyePatchRect, face.headEulerAngleY)
                     }
                 }
-                CameraProp.Type.NOSE->{
-                    face.getContour(FaceContour.NOSE_BOTTOM)?.let {
-                        val moustacheTop = it.points[1].y
-                        val moustacheStart = it.points[0].x
-                        val moustacheEnd = it.points[2].x
-
-                        val rectHeight = (cameraPropsBitmapList[index].height/cameraPropsBitmapList[index].width)*(moustacheEnd-moustacheStart)
-                        val moustacheBottom = moustacheTop + rectHeight
-
-                        val moustacheRect = Rect(
-                            translateX(moustacheStart).toInt(),
-                            translateY(moustacheTop).toInt(),
-                            translateX(moustacheEnd).toInt(),
-                            translateY(moustacheBottom).toInt()
-                        )
-
-                        drawBitmapOnCanvas(canvas, cameraPropsBitmapList[index],moustacheRect, face.headEulerAngleY)
-                    }
-                }
+//                CameraProp.Type.NOSE->{
+//                    val nose = face.getContour(FaceContour.NOSE_BOTTOM)
+//                    val mouth = face.getContour(FaceContour.UPPER_LIP_TOP)
+//                    if(nose !=null && mouth != null) {
+//                        val moustacheTop = nose.points[1].y
+//                        val moustacheStart = mouth.points[0].x
+//                        val moustacheEnd = mouth.points[10].x
+//
+//                        val rectHeight = (cameraPropsBitmapList[index].height/cameraPropsBitmapList[index].width.toFloat())*(moustacheEnd-moustacheStart)
+//                        val moustacheBottom = moustacheTop + rectHeight
+//
+//                        val moustacheRect = Rect(
+//                            translateX(moustacheStart).toInt(),
+//                            translateY(moustacheTop).toInt(),
+//                            translateX(moustacheEnd).toInt(),
+//                            translateY(moustacheBottom).toInt()
+//                        )
+//
+//                        drawBitmapOnCanvas(canvas, cameraPropsBitmapList[index],moustacheRect, face.headEulerAngleY)
+//                    }
+//                }
                 else->{}
             }
         }
@@ -280,7 +272,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
 
     private fun drawBitmapOnCanvas(canvas: Canvas, bitmap: Bitmap, rect:Rect, rotation:Float){
         canvas.save()
-        canvas.rotate(rotation)
+        canvas.rotate(rotation*-1)
+        //canvas.drawRect(rect,Paint().apply { color = Color.BLUE })
 
         canvas.drawBitmap(bitmap, null, rect, null)
         canvas.restore()
@@ -290,7 +283,11 @@ class OverlayView(context: Context?, attrs: AttributeSet?) : View(context, attrs
      * Adjusts the x coordinate from the preview's coordinate system to the view coordinate system.
      */
     private fun translateX(x: Float): Float {
-        return width - scaleX(x)
+        // Adjust scale and position to fit preview coordinate system
+        //return width - scaleX(x)
+
+        //Adjust position only to fit preview coordinate system
+        return x - 180
     }
 
     /**

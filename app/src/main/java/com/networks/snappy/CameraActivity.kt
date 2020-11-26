@@ -38,9 +38,15 @@ class CameraActivity : AppCompatActivity(), FilterRecyclerAdapter.ViewHolderActi
 
         camera_view.setLifecycleOwner(this)
 
+        camera_view.setOnClickListener {
+            camera_view.takePictureSnapshot()
+        }
+
         face_props_recycler_view.adapter = propsAdapter
 
         filter_recyclerview.adapter = filtersAdapter
+
+        overlay_view.faceProps = FaceProps.PIRATE
 
         processor = FacePropsProcessor(this,camera_view,overlay_view)
 

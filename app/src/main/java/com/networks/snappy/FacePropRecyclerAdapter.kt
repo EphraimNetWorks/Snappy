@@ -33,7 +33,7 @@ class FacePropRecyclerAdapter(
         private val propImageView = view.prop_img
 
         fun bind(props: FaceProps){
-            propImageView.setBackgroundResource(props.icon)
+            propImageView.setImageResource(props.icon)
             propImageView.setOnClickListener {
                 actions.applyFaceProp(props)
             }
@@ -42,7 +42,7 @@ class FacePropRecyclerAdapter(
         companion object{
             fun create(parent: ViewGroup, actions: ViewHolderActions): FacePropViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.adapter_filter, parent, false)
+                val view = layoutInflater.inflate(R.layout.adapter_face_props, parent, false)
                 return FacePropViewHolder(view, actions)
             }
         }

@@ -15,44 +15,51 @@
         app:cameraFacing="front" >
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.networks.snappy.OverlayView
+            android:id="@+id/overlay_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.networks.snappy.OverlayView
-                android:id="@+id/overlay_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/face_props_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="horizontal"
-                android:layout_margin="8dp"
-                tools:itemCount="10"
-                tools:listitem="@layout/adapter_face_props"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/filter_recyclerview"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/filter_recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:orientation="horizontal"
-                android:layout_margin="8dp"
-                tools:itemCount="10"
-                tools:listitem="@layout/adapter_filter"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="match_parent"
+            app:layout_drawOnPreview="true"
+            app:layout_drawOnPictureSnapshot="true"
+            app:layout_drawOnVideoSnapshot="true" />
 
     </com.otaliastudios.cameraview.CameraView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/controls"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_drawOnPreview="true"
+        app:layout_drawOnPictureSnapshot="false"
+        app:layout_drawOnVideoSnapshot="false">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/face_props_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            android:layout_margin="8dp"
+            tools:itemCount="10"
+            tools:listitem="@layout/adapter_face_props"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/filter_recyclerview"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/filter_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            android:layout_margin="8dp"
+            tools:itemCount="10"
+            tools:listitem="@layout/adapter_filter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

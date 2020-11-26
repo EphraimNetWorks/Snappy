@@ -32,7 +32,7 @@ enum class FaceProps constructor(
     PIRATE(
         R.drawable.pirate_hat,
         listOf(
-            CameraProp(CameraProp.Type.HEAD, R.drawable.christmas_hat),
+            CameraProp(CameraProp.Type.HEAD, R.drawable.pirate_hat),
             CameraProp(CameraProp.Type.LEFT_EYEBROW, R.drawable.pirate_eye_patch),
             CameraProp(CameraProp.Type.NOSE, R.drawable.moustache),
         )

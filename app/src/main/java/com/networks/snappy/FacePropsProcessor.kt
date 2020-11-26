@@ -14,6 +14,7 @@ class FacePropsProcessor(
 ) {
 
     private val options = FaceDetectorOptions.Builder()
+        //.setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
         .setContourMode(FaceDetectorOptions.CONTOUR_MODE_ALL)
         .build()
 
@@ -33,7 +34,14 @@ class FacePropsProcessor(
                 overlayView.previewHeight = frame.size.width
             }
 
-            detector.process(InputImage.fromMediaImage(frame.getData(), rotation))
+            val inputImage = InputImage.fromByteArray(
+                frame.getData(),
+                frame.size.width,
+                frame.size.height,
+                frame.rotationToUser,
+                InputImage.IMAGE_FORMAT_NV21
+            )
+            detector.process(inputImage)
                 .addOnSuccessListener {
                     processFaceDetectionResult(it)
                 }.addOnFailureListener {
