@@ -1,2 +1,2 @@
 # Snappy
-Using google ML kit to build camera filter props
+Exploring google's android mlkit
